@@ -198,7 +198,7 @@ client.vm.provision "ansible" do |ansible|
   ansible.playbook = "python.yaml"
 end
 ```
-This will use the `python.yaml` included in this repo to provision your vm just like we have done with previous projects using the `shell` provisioner. The difference is thaty it will use Ansible and be idempotent so that it doesn't try and install things that are already installed like `shell` provisioning will.
+This will use the `python.yaml` playbook that is included in this repo to provision your vm just like we have done with previous projects using the `shell` provisioner. The difference is that it will use Ansible and be idempotent so that it doesn't try and install things that are already installed like `shell` provisioning will do.
 
 ## Experiment
 
