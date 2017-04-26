@@ -1,0 +1,49 @@
+---
+- hosts: webservers:dbservers
+  sudo: yes
+
+  tasks:
+  - name: Make sure all servers have the latest OS patches
+    shell: apt-get update -y
+
+######################################################################
+# Web Servers
+######################################################################
+- hosts: webservers
+  sudo: yes
+
+  tasks:
+  - name: Ensure that Apache is at the latest version
+    apt: pkg=apache2 state=latest
+    notify:
+      - restart apache2
+
+  - name: Start Apache Services
+    service: name=apache2 enabled=yes state=started
+
+  handlers:
+  - name: restart apache2
+    service: name=apache2 state=restarted
+
+######################################################################
+# Database Servers
+######################################################################
+- hosts: dbservers
+  sudo: yes
+
+  tasks:
+  - name: Ensure Redis is installed
+    apt: pkg=redis-server state=present
+
+  - name: Start Redis
+    service: name=redis-server state=started
+
+######################################################################
+# Both web and db Servers
+######################################################################
+- hosts: webservers:dbservers
+  sudo: yes
+
+  tasks:
+  - name: Stop UFW NOW!!!
+    service: name=ufw state=stopped
