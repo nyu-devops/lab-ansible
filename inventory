@@ -1,5 +1,4 @@
-client ansible_ssh_host=192.168.33.10
-web1 ansible_ssh_host=192.168.33.20 username=ansible_user
+web1 ansible_ssh_host=192.168.33.20
 db1 ansible_ssh_host=192.168.33.30
 
 [webservers]

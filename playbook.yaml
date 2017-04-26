@@ -1,10 +1,16 @@
 ---
-- hosts: webservers:dbservers
+- hosts: all
   sudo: yes
 
   tasks:
-  - name: Make sure all servers have the latest OS patches
+  - name: Make sure all servers have the latest catalog
     shell: apt-get update -y
+
+  - name: Remove any unneeded packages
+    shell: apt-get autoremove -y
+
+  - name: Make sure all servers have the latest OS patches
+    shell: apt-get upgrade -y
 
 ######################################################################
 # Web Servers
