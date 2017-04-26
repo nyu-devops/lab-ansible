@@ -190,6 +190,16 @@ PLAY RECAP ********************************************************************
 web1                       : ok=4    changed=1    unreachable=0    failed=0
 ```
 
-### Experiment
+## Vagrant and Ansible
+
+You can actually use Ansible to provision your Vagrant vm. The only prerequsite is that you have to already have Ansible installed on your laptop. The easiest way to do this for Python developers is with `pip install ansible`. There is an example at the bottom of the `Vagrantfile` that is commented out. It looks like this:
+```
+client.vm.provision "ansible" do |ansible|
+  ansible.playbook = "python.yaml"
+end
+```
+This will use the `python.yaml` included in this repo to provision your vm just like we have done with previous projects using the `shell` provisioner. The difference is thaty it will use Ansible and be idempotent so that it doesn't try and install things that are already installed like `shell` provisioning will.
+
+## Experiment
 
 You now have a small multi-server environment on your laptop where you can feel free to explore  more `ansible` commands that you've learned in class.
