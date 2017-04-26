@@ -1,0 +1,13 @@
+---
+- hosts: all
+  sudo: yes
+
+  tasks:
+  - name: install required packages for Python using the apt module
+    apt: package={{ item }}  update_cache=yes
+    sudo: True
+    with_items:
+      - git
+      - python-pip
+      - python-dev
+      - build-essential

@@ -54,6 +54,19 @@ Vagrant.configure("2") do |config|
       # Make vi look nice
       sudo -H -u vagrant echo "colorscheme desert" > ~/.vimrc
     SHELL
+
+    #
+    # Run Ansible from the Vagrant Host
+    #
+    # You can use Ansible to provision vm's but you need to have
+    # it installed on your laptop first. The easiest was is with pip
+    #    sudo pip install ansible
+    #
+    # Uncomment the next 3 lines to provision a vm with Ansible
+    # client.vm.provision "ansible" do |ansible|
+    #   ansible.playbook = "python.yaml"
+    # end
+
   end
 
 end

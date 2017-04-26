@@ -19,6 +19,8 @@ You can now run `ansible` commands.
 
 The `Vagrantfile` in this repo will create three (3) virtual machines: client, web, & db. Each contains 256MB of memory so all together they will take up 768MB of memory on your laptop while running.
 
+### Ping for testing connectivity
+
 To see if everything is working you can `vagrant ssh client` and issue the command:
 
     cd /vagrant
@@ -37,9 +39,13 @@ It should respond with:
     }
 ```
 
+### Ad-hock commands
+
 To run a command on all servers use `all` as the target and `-a` followed by the command that you want to run:
 
     ansible all -a 'sudo apt-get update -y'
+
+## Using Playbooks
 
 But the real power of Ansible is in it's playbooks. To see which tasks will be executed when running a playbook use the `--list-tasks` flag:
 
@@ -65,9 +71,14 @@ playbook: playbook.yaml
   play #4 (webservers:dbservers):
     Stop UFW NOW!!!
 ```
+
+### Using Dry Run mode
+
 You can also run the playbooks in _Dry Run_ mode to check what would be changing if you atually ran it. You would use the `--check` flag to do this:
 
     ansible-playbook playbook.yaml --check
+
+### Running a playbook
 
 Finally to run the playbook change your servers use:
 
@@ -132,5 +143,53 @@ PLAY RECAP ********************************************************************
 db1                        : ok=9    changed=5    unreachable=0    failed=0
 web1                       : ok=10   changed=6    unreachable=0    failed=0
 ```
+
+### Tips for debugging
+
+The `debugging.yaml` file shows how to register variables during your run that contain information that is useful in debugging.
+
+    ansible-playbook debugging.yaml
+
+Produces the following output:
+```
+PLAY [webservers] *************************************************************
+
+GATHERING FACTS ***************************************************************
+ok: [web1]
+
+TASK: [Show how to register output] *******************************************
+changed: [web1]
+
+TASK: [Show what was saved is JSON] *******************************************
+ok: [web1] => {
+    "output_from_pwd": {
+        "changed": true,
+        "cmd": "pwd ",
+        "delta": "0:00:00.001082",
+        "end": "2017-04-26 14:02:43.714501",
+        "invocation": {
+            "module_args": "pwd",
+            "module_name": "shell"
+        },
+        "rc": 0,
+        "start": "2017-04-26 14:02:43.713419",
+        "stderr": "",
+        "stdout": "/home/vagrant",
+        "stdout_lines": [
+            "/home/vagrant"
+        ]
+    }
+}
+
+TASK: [Get return code from JSON output] **************************************
+ok: [web1] => {
+    "msg": "Return code was 0"
+}
+
+PLAY RECAP ********************************************************************
+web1                       : ok=4    changed=1    unreachable=0    failed=0
+```
+
+### Experiment
 
 You now have a small multi-server environment on your laptop where you can feel free to explore  more `ansible` commands that you've learned in class.

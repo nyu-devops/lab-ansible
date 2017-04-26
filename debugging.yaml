@@ -1,0 +1,10 @@
+---
+- hosts: webservers
+  tasks:
+  - name: Show how to register output
+    shell: pwd
+    register: output_from_pwd
+  - name: Show what was saved is JSON
+    debug: var=output_from_pwd
+  - name: Get return code from JSON output
+    debug: msg="Return code was {{ output_from_pwd['rc'] }}"
