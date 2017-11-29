@@ -135,6 +135,15 @@ You can also run the playbooks in _Dry Run_ mode to check what would be changing
 
     ansible-playbook playbook.yaml --check
 
+The check summary will have one failure:
+```
+PLAY RECAP *********************************************************************
+db1                        : ok=2    changed=1    unreachable=0    failed=0
+web1                       : ok=5    changed=3    unreachable=0    failed=1
+```
+
+That's OK because `apache2` is not installed so it cannot be started.
+
 ### Running a playbook
 
 Finally to run the playbook change your servers use:
@@ -190,7 +199,7 @@ changed: [db1]
 
 PLAY RECAP *********************************************************************
 db1                        : ok=7    changed=3    unreachable=0    failed=0
-web1                       : ok=8    changed=4    unreachable=0    failed=0   
+web1                       : ok=8    changed=4    unreachable=0    failed=0
 ```
 
 ### Tips for debugging
