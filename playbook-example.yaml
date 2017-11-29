@@ -1,0 +1,29 @@
+######################################################################
+# LAMP Stack Example
+######################################################################
+
+# Two approaches
+---
+- hosts: all
+  become: yes
+  tasks:
+  - name: Install MySQL server
+    apt: name=mysql-server state=latest
+
+  - name: Install Apache module for MySQL authentication
+    apt: name=libapache2-mod-auth-mysql state=latest
+
+  - name: Install MySQL module for PHP
+    apt: name=php5-mysql state=latest
+
+# A better way would be like this:
+---
+- hosts: all
+  become: yes
+  tasks:
+  - name: install packages
+    apt: name={{item}} state=latest update_cache=yes
+    with_items:
+    - mysql-server
+    - libapache2-mod-auth-mysql
+    - php5-mysql

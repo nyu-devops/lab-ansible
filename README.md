@@ -1,7 +1,7 @@
 # lab-ansible
-This repository is part of lab for the *NYU DevOps* class for Spring 2017, [CSCI-GA.3033-013](http://cs.nyu.edu/courses/spring17/CSCI-GA.3033-013/) on using Ansible for Configuration Management.
+This repository is part of lab for the *NYU DevOps* class for Fall 2017, [CSCI-GA.3033-013](http://cs.nyu.edu/courses/fall17/CSCI-GA.3033-014/) on using Ansible for Configuration Management.
 
-This lab demonstrates how to use Ansible to create and configure Virtual Machines
+This lab demonstrates how to use Ansible to create and configure Virtual Machines. While the majority of this course uses Platform as a Service, there are times when you may need to setup your own infrastructure in-house and it's important that even that is full automated.
 
 ## Setup
 
@@ -17,7 +17,9 @@ You can now run `ansible` commands.
 
 ## Running Ansible
 
-The `Vagrantfile` in this repo will create three (3) virtual machines: client, web, & db. Each contains 256MB of memory so all together they will take up 768MB of memory on your laptop while running.
+The `Vagrantfile` in this repo will create three (3) virtual machines: client, web, & db. Each contains 256MB of memory so all together they will take up 768MB of memory on your laptop while running. The client machine is provided so that you don't have to install Ansible locally on your computer. The other two are a web server and database server which we will configure with Ansible from the client machine.
+
+**Note:** _Because we have multiple vurtual machines, you cannot simply use the command `vagrant ssh` without specifying the VM that you want to `ssh` into so you always have to use `vagrant ssh client` to get to the client VM._
 
 ### Ping for testing connectivity
 
@@ -26,24 +28,77 @@ To see if everything is working you can `vagrant ssh client` and issue the comma
     cd /vagrant
     ansible -m ping all
 
+It will respond with:
+```
+web1 | FAILED! => {
+    "changed": false,
+    "failed": true,
+    "module_stderr": "",
+    "module_stdout": "bash: /usr/bin/python: No such file or directory\r\n",
+    "msg": "MODULE FAILURE",
+    "parsed": false
+}
+db1 | FAILED! => {
+    "changed": false,
+    "failed": true,
+    "module_stderr": "",
+    "module_stdout": "bash: /usr/bin/python: No such file or directory\r\n",
+    "msg": "MODULE FAILURE",
+    "parsed": false
+}
+```
+
+What happened? Ansible needs Python installed on all of the nodes in order to work. We can fix this with Ansible by making sure that Pythin is installed first. Do so this run the `prechecks.yaml` playbook like this:
+
+    ansible-playbook prechecks.yaml
+
+This will respond with:
+```
+PLAY [Ensure connectivity to all nodes] ****************************************
+
+TASK [Check if python is installed] ********************************************
+ok: [web1]
+ok: [db1]
+
+TASK [Install python] **********************************************************
+ok: [web1]
+ok: [db1]
+
+TASK [Ensure that aptitude is installed] ***************************************
+changed: [web1]
+changed: [db1]
+
+PLAY RECAP *********************************************************************
+db1                        : ok=3    changed=1    unreachable=0    failed=0
+web1                       : ok=3    changed=1    unreachable=0    failed=0
+```
+
+Now we can try and `ping` the nodes again with:
+```
+    ansible -m ping all
+```
+
 It should respond with:
 ```
-    web1 | success >> {
-        "changed": false,
-        "ping": "pong"
-    }
-
-    db1 | success >> {
-        "changed": false,
-        "ping": "pong"
-    }
+db1 | SUCCESS => {
+    "changed": false,
+    "ping": "pong"
+}
+web1 | SUCCESS => {
+    "changed": false,
+    "ping": "pong"
+}
 ```
 
 ### Ad-hock commands
 
+You can run ad-hock commands on servers if needed. Since this is not repeatable, you really should always create a `playbook` so that others will know what commands were run and they can run them again simply by running the playbook.
+
 To run a command on all servers use `all` as the target and `-a` followed by the command that you want to run:
 
     ansible all -a 'sudo apt-get update -y'
+
+This will run `sudo apt-get update -y` on all servers in the `inventory`
 
 ## Using Playbooks
 
@@ -55,21 +110,23 @@ You should see output like the following:
 ```
 playbook: playbook.yaml
 
-  play #1 (all):
-    Make sure all servers have the latest catalog
-    Remove any unneeded packages
-    Make sure all servers have the latest OS patches
+  play #1 (all): Performing Package Maintenance on All nodes	TAGS: []
+    tasks:
+      Update and upgrade local packages	TAGS: []
 
-  play #2 (webservers):
-    Ensure that Apache is at the latest version
-    Start Apache Services
+  play #2 (webservers): 	TAGS: []
+    tasks:
+      Ensure that Apache is at the latest version	TAGS: []
+      Start Apache Services	TAGS: []
 
-  play #3 (dbservers):
-    Ensure Redis is installed
-    Start Redis
+  play #3 (dbservers): 	TAGS: []
+    tasks:
+      Ensure Redis is installed	TAGS: []
+      Start Redis	TAGS: []
 
-  play #4 (webservers:dbservers):
-    Stop UFW NOW!!!
+  play #4 (webservers:dbservers): 	TAGS: []
+    tasks:
+      Stop UFW NOW!!!	TAGS: []
 ```
 
 ### Using Dry Run mode
@@ -86,62 +143,54 @@ Finally to run the playbook change your servers use:
 
 This will execute the commands that are in `playbook.yaml` and display output like the following:
 ```
-PLAY [all] ********************************************************************
+PLAY [Performing Package Maintenance on All nodes] *****************************
 
-GATHERING FACTS ***************************************************************
+TASK [setup] *******************************************************************
 ok: [web1]
 ok: [db1]
 
-TASK: [Make sure all servers have the latest catalog] *************************
+TASK [Update and upgrade local packages] ***************************************
 changed: [db1]
 changed: [web1]
 
-TASK: [Remove any unneeded packages] ******************************************
-changed: [db1]
-changed: [web1]
+PLAY ***************************************************************************
 
-TASK: [Make sure all servers have the latest OS patches] **********************
-changed: [db1]
-changed: [web1]
-
-PLAY [webservers] *************************************************************
-
-GATHERING FACTS ***************************************************************
+TASK [setup] *******************************************************************
 ok: [web1]
 
-TASK: [Ensure that Apache is at the latest version] ***************************
+TASK [Ensure that Apache is at the latest version] *****************************
 changed: [web1]
 
-TASK: [Start Apache Services] *************************************************
+TASK [Start Apache Services] ***************************************************
 ok: [web1]
 
-NOTIFIED: [restart apache2] ***************************************************
+RUNNING HANDLER [restart apache2] **********************************************
 changed: [web1]
 
-PLAY [dbservers] **************************************************************
+PLAY ***************************************************************************
 
-GATHERING FACTS ***************************************************************
+TASK [setup] *******************************************************************
 ok: [db1]
 
-TASK: [Ensure Redis is installed] *********************************************
+TASK [Ensure Redis is installed] ***********************************************
 changed: [db1]
 
-TASK: [Start Redis] ***********************************************************
+TASK [Start Redis] *************************************************************
 ok: [db1]
 
-PLAY [webservers:dbservers] ***************************************************
+PLAY ***************************************************************************
 
-GATHERING FACTS ***************************************************************
-ok: [db1]
+TASK [setup] *******************************************************************
 ok: [web1]
+ok: [db1]
 
-TASK: [Stop UFW NOW!!!] *******************************************************
-changed: [db1]
+TASK [Stop UFW NOW!!!] *********************************************************
 changed: [web1]
+changed: [db1]
 
-PLAY RECAP ********************************************************************
-db1                        : ok=9    changed=5    unreachable=0    failed=0
-web1                       : ok=10   changed=6    unreachable=0    failed=0
+PLAY RECAP *********************************************************************
+db1                        : ok=7    changed=3    unreachable=0    failed=0
+web1                       : ok=8    changed=4    unreachable=0    failed=0   
 ```
 
 ### Tips for debugging
@@ -189,6 +238,12 @@ ok: [web1] => {
 PLAY RECAP ********************************************************************
 web1                       : ok=4    changed=1    unreachable=0    failed=0
 ```
+
+You can also add the `-v` parameter when running a playbook to see the commands that are being executed. Running the following:
+```
+    ansible-playbook -v playbook.yaml
+```
+Will run the playbook with _verbose_ output.
 
 ## Vagrant and Ansible
 

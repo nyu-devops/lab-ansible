@@ -1,22 +1,23 @@
 ---
-- hosts: all
-  sudo: yes
+######################################################################
+# Perform maintenance on all servers
+######################################################################
+- name: Performing Package Maintenance on All nodes
+  hosts: all
+  become: yes
 
   tasks:
-  - name: Make sure all servers have the latest catalog
-    shell: apt-get update -y
+  - name: Update and upgrade local packages
+    apt: upgrade=full update_cache=yes
 
-  - name: Remove any unneeded packages
-    shell: apt-get autoremove -y
-
-  - name: Make sure all servers have the latest OS patches
-    shell: apt-get upgrade -y
+  # - name: Upgrade distribution packages
+  #   apt: upgrade=dist update_cache=yes
 
 ######################################################################
 # Web Servers
 ######################################################################
 - hosts: webservers
-  sudo: yes
+  become: yes
 
   tasks:
   - name: Ensure that Apache is at the latest version
@@ -35,7 +36,7 @@
 # Database Servers
 ######################################################################
 - hosts: dbservers
-  sudo: yes
+  become: yes
 
   tasks:
   - name: Ensure Redis is installed
@@ -48,7 +49,7 @@
 # Both web and db Servers
 ######################################################################
 - hosts: webservers:dbservers
-  sudo: yes
+  become: yes
 
   tasks:
   - name: Stop UFW NOW!!!

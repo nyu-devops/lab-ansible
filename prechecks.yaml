@@ -1,0 +1,27 @@
+---
+######################################################################
+# Make sure that all nodes have Python installed
+######################################################################
+- name: Ensure connectivity to all nodes
+  hosts: all
+  gather_facts: false
+  become: yes
+  pre_tasks:
+    - name: Check if python is installed
+      raw: test -e /usr/bin/python
+      register: python_installed
+      changed_when: false
+      failed_when: false
+    - name: Install python
+      raw: (apt-get -y update && apt-get install -y python)
+      when: python_installed.rc != 0
+  tasks:
+    - name: Ansible setup
+      action: setup
+      tags: ['ping']
+    - name: Ensure that aptitude is installed
+      apt:
+        name: aptitude
+        state: present
+  any_errors_fatal: true
+  max_fail_percentage: 0

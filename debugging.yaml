@@ -1,5 +1,6 @@
 ---
 - hosts: webservers
+  become: yes
   tasks:
   - name: Show how to register output
     shell: pwd
@@ -8,3 +9,12 @@
     debug: var=output_from_pwd
   - name: Get return code from JSON output
     debug: msg="Return code was {{ output_from_pwd['rc'] }}"
+
+  - name: Update and upgrade apt packages
+    shell: "apt-get update -y && apt-get upgrade -y"
+    register: command_output
+  - debug: msg="{{ command_output['stdout_lines'] }}"
+  - set_fact:
+      last_output_line: "{{ command_output['stdout_lines'][-1:][0] }}"
+  - name: Echo the last line from command output
+    shell: "echo Last line was: {{ last_output_line }}"

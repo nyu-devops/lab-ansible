@@ -1,11 +1,17 @@
 ---
-- hosts: all
-  sudo: yes
+- name: Performing Package Maintenance on All nodes
+  hosts: all
+  become: yes
+  tasks:
+  - name: Update and upgrade local packages
+    apt: upgrade=full update_cache=yes
 
+- name: Installing Python development environment
+  hosts: all
+  become: yes
   tasks:
   - name: install required packages for Python using the apt module
     apt: package={{ item }}  update_cache=yes
-    sudo: True
     with_items:
       - git
       - python-pip
