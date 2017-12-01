@@ -31,9 +31,9 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: <<-SHELL
     # add public ssh key to authorized_keys
     cat /home/ubuntu/.ssh/id_rsa.pub >> /home/ubuntu/.ssh/authorized_keys
-		chmod 600 /home/ubuntu/.ssh/id_rsa.pub
-		chmod 600 /home/ubuntu/.ssh/id_rsa
-		chmod 700 /home/ubuntu/.ssh
+    chmod 644 /home/ubuntu/.ssh/id_rsa.pub
+    chmod 600 /home/ubuntu/.ssh/id_rsa
+    chmod 700 /home/ubuntu/.ssh
   SHELL
 
   # Create the web server
