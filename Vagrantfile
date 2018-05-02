@@ -30,10 +30,10 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "shell", inline: <<-SHELL
     # add public ssh key to authorized_keys
-    cat /home/ubuntu/.ssh/id_rsa.pub >> /home/ubuntu/.ssh/authorized_keys
-    chmod 644 /home/ubuntu/.ssh/id_rsa.pub
-    chmod 600 /home/ubuntu/.ssh/id_rsa
-    chmod 700 /home/ubuntu/.ssh
+    cat /home/vagrant/.ssh/id_rsa.pub >> /home/vagrant/.ssh/authorized_keys
+    chmod 644 /home/vagrant/.ssh/id_rsa.pub
+    chmod 600 /home/vagrant/.ssh/id_rsa
+    chmod 700 /home/vagrant/.ssh
   SHELL
 
   # Create the web server
@@ -74,7 +74,7 @@ Vagrant.configure("2") do |config|
       sudo echo "192.168.33.20   web1" >> /etc/hosts
       sudo echo "192.168.33.30   db1" >> /etc/hosts
       # Make vi look nice
-      sudo -H -u ubuntu echo "colorscheme desert" > ~/.vimrc
+      sudo -H -u vagrant echo "colorscheme desert" > ~/.vimrc
     SHELL
 
     #
@@ -82,7 +82,7 @@ Vagrant.configure("2") do |config|
     #
     # config.vm.provision :guest_ansible do |guest_ansible|
     #   guest_ansible.playbook = "python.yaml"
-    #   guest_ansible.extra_vars = extra_vars
+    #   guest_ansible.extra_vars = { user: "vagrant" }
     #   guest_ansible.sudo = true
     # end
 
