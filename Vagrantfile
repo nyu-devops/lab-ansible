@@ -1,11 +1,12 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# Commented out bacsue it doesn't work for Windows clients
 #creating keys allowing inter-cluster ssh
-if ARGV[0] == "up"
-    puts "Info: attempting to create ssh keys"
-    system('./keys/create-keys.sh')
-end
+# if ARGV[0] == "up"
+#     puts "Info: attempting to create ssh keys"
+#     system('./keys/create-keys.sh')
+# end
 
 # unless Vagrant.has_plugin?("vagrant-guest_ansible")
 #   system("vagrant plugin install vagrant-guest_ansible")
@@ -40,7 +41,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "web" do |web|
     web.vm.hostname = "web"
     web.vm.network "private_network", ip: "192.168.33.20"
-    web.vm.network "forwarded_port", guest: 80, host: 8080
+    web.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
     web.vm.provider "virtualbox" do |vb|
       vb.memory = "256"
       vb.cpus = 1
