@@ -8,10 +8,15 @@
 #     system('./keys/create-keys.sh')
 # end
 
-# unless Vagrant.has_plugin?("vagrant-guest_ansible")
-#   system("vagrant plugin install vagrant-guest_ansible")
-#   puts "Ansible dependencies installed, please try the command again."
-#   exit
+# WARNING: You will need the following plugin:
+# vagrant plugin install vagrant-guest_ansible
+# if Vagrant.plugins_enabled?
+#   unless Vagrant.has_plugin?('vagrant-guest_ansible')
+#     puts 'Plugin missing.'
+#     system('vagrant plugin install vagrant-guest_ansible')
+#     puts 'Ansible dependencies installed, please try the command again.'
+#     exit
+#   end
 # end
 
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
