@@ -89,15 +89,6 @@ Vagrant.configure("2") do |config|
     SHELL
 
     #
-    # Run Ansible using the guest plugin
-    #
-    # config.vm.provision :guest_ansible do |guest_ansible|
-    #   guest_ansible.playbook = "python.yaml"
-    #   guest_ansible.extra_vars = { user: "vagrant" }
-    #   guest_ansible.sudo = true
-    # end
-
-    #
     # Run Ansible from the Vagrant Host
     #
     # You can use Ansible to provision vm's but you need to have
@@ -110,5 +101,23 @@ Vagrant.configure("2") do |config|
     # end
 
   end
+
+  # # Create a Python server
+  # config.vm.define "python" do |db|
+  #   db.vm.hostname = "python"
+  #   db.vm.network "private_network", ip: "192.168.33.40"
+  #   db.vm.provider "virtualbox" do |vb|
+  #     vb.memory = "256"
+  #     vb.cpus = 1
+  #   end
+  #   #
+  #   # Run Ansible using the guest plugin
+  #   #
+  #   config.vm.provision :guest_ansible do |guest_ansible|
+  #     guest_ansible.playbook = "python.yaml"
+  #     guest_ansible.extra_vars = { user: "vagrant" }
+  #     guest_ansible.sudo = true
+  #   end
+  # end
 
 end
