@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# Commented out bacsue it doesn't work for Windows clients
+# Commented out because it doesn't work for Windows clients
 #creating keys allowing inter-cluster ssh
 # if ARGV[0] == "up"
 #     puts "Info: attempting to create ssh keys"
@@ -32,6 +32,11 @@ Vagrant.configure("2") do |config|
   end
   if File.exists?(File.expand_path("./keys/id_rsa.pub"))
     config.vm.provision "file", source: "./keys/id_rsa.pub", destination: "~/.ssh/id_rsa.pub"
+  end
+
+  # Copy your .vimrc file so that your VI editor looks right
+  if File.exists?(File.expand_path("~/.vimrc"))
+    config.vm.provision "file", source: "~/.vimrc", destination: "~/.vimrc"
   end
 
   config.vm.provision "shell", inline: <<-SHELL
