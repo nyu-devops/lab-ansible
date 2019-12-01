@@ -24,7 +24,7 @@
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
 Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu/xenial64"
+  config.vm.box = "ubuntu/bionic64"
 
   # Copy the ssh keys to all of the vms
   if File.exists?(File.expand_path("./keys/id_rsa"))
@@ -53,7 +53,7 @@ Vagrant.configure("2") do |config|
     web.vm.network "private_network", ip: "192.168.33.20"
     web.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
     web.vm.provider "virtualbox" do |vb|
-      vb.memory = "256"
+      vb.memory = "512"
       vb.cpus = 1
     end
   end
@@ -63,7 +63,7 @@ Vagrant.configure("2") do |config|
     db.vm.hostname = "db"
     db.vm.network "private_network", ip: "192.168.33.30"
     db.vm.provider "virtualbox" do |vb|
-      vb.memory = "256"
+      vb.memory = "512"
       vb.cpus = 1
     end
   end

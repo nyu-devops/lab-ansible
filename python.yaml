@@ -4,7 +4,7 @@
   become: yes
   tasks:
   - name: Update and upgrade local packages
-    apt: upgrade=full update_cache=yes
+    apt: upgrade=yes update_cache=yes
 
 - name: Installing Python development environment
   hosts: all

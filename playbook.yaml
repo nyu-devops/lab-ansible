@@ -8,10 +8,7 @@
 
   tasks:
   - name: Update and upgrade local packages
-    apt: upgrade=full update_cache=yes
-
-  # - name: Upgrade distribution packages
-  #   apt: upgrade=dist update_cache=yes
+    apt: upgrade=yes update_cache=yes
 
 ######################################################################
 # Web Servers
