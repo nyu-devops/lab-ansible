@@ -10,14 +10,14 @@
 
 # WARNING: You will need the following plugin:
 # vagrant plugin install vagrant-guest_ansible
-# if Vagrant.plugins_enabled?
-#   unless Vagrant.has_plugin?('vagrant-guest_ansible')
-#     puts 'Plugin missing.'
-#     system('vagrant plugin install vagrant-guest_ansible')
-#     puts 'Ansible dependencies installed, please try the command again.'
-#     exit
-#   end
-# end
+if Vagrant.plugins_enabled?
+  unless Vagrant.has_plugin?('vagrant-guest_ansible')
+    puts 'Plugin missing.'
+    system('vagrant plugin install vagrant-guest_ansible')
+    puts 'Ansible dependencies installed, please try the command again.'
+    exit
+  end
+end
 
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
@@ -72,6 +72,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "client" do |client|
     client.vm.hostname = "client"
     client.vm.network "private_network", ip: "192.168.33.10"
+    client.vm.network "forwarded_port", guest: 5000, host: 5000, host_ip: "127.0.0.1"
     client.vm.provider "virtualbox" do |vb|
       vb.memory = "256"
       vb.cpus = 1
@@ -85,7 +86,7 @@ Vagrant.configure("2") do |config|
       sudo echo "192.168.33.20   web1" >> /etc/hosts
       sudo echo "192.168.33.30   db1" >> /etc/hosts
       # Make vi look nice
-      sudo -H -u vagrant echo "colorscheme desert" > ~/.vimrc
+      # sudo -H -u vagrant echo "colorscheme desert" > ~/.vimrc
     SHELL
 
     #

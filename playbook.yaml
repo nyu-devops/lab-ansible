@@ -37,10 +37,29 @@
 
   tasks:
   - name: Ensure Redis is installed
-    apt: pkg=redis-server state=present
+    apt:
+      package: redis-server
+      state: present
+
+  - name: Ensure Redis is listening on all ports
+    lineinfile:
+      path: /etc/redis/redis.conf
+      regexp: '^bind '
+      insertafter: '^#bind '
+      line: bind 0.0.0.0
+    notify: Restart Redis
 
   - name: Start Redis
-    service: name=redis-server state=started
+    service:
+      name: redis-server
+      state: started
+
+  handlers:
+  - name: Restart Redis
+    service:
+      name: redis-server
+      state: restarted
+
 
 ######################################################################
 # Both web and db Servers

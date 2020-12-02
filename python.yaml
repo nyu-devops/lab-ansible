@@ -10,10 +10,13 @@
   hosts: all
   become: yes
   tasks:
-  - name: install required packages for Python using the apt module
-    apt: package={{ item }}  update_cache=yes
-    with_items:
-      - git
-      - python-pip
-      - python-dev
-      - build-essential
+  - name: Install Python packages using the apt module
+    apt: 
+      package: ['git', 'python3-pip', 'python3-dev', 'python3-venv']
+      update_cache: yes
+
+  - name: Install Python requirements into the specified (virtualenv)
+    pip:
+      requirements: /vagrant/requirements.txt
+      virtualenv: /home/vagrant/venv
+      virtualenv_command: /usr/bin/python3 -m venv      
