@@ -99,9 +99,9 @@ Vagrant.configure("2") do |config|
     #    sudo pip install ansible
     #
     # Uncomment the next 3 lines to provision a vm with Ansible
-    client.vm.provision "ansible" do |ansible|
-      ansible.playbook = "python.yaml"
-    end
+    # client.vm.provision "ansible" do |ansible|
+    #   ansible.playbook = "python.yaml"
+    # end
 
   end
 
