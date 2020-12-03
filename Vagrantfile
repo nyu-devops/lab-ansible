@@ -26,6 +26,8 @@ end
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/bionic64"
 
+  config.vm.synced_folder "./", "/vagrant", owner: "vagrant", mount_options: ["dmode=755,fmode=644"]
+
   # Copy the ssh keys to all of the vms
   if File.exists?(File.expand_path("./keys/id_rsa"))
     config.vm.provision "file", source: "./keys/id_rsa", destination: "~/.ssh/id_rsa"
@@ -97,9 +99,9 @@ Vagrant.configure("2") do |config|
     #    sudo pip install ansible
     #
     # Uncomment the next 3 lines to provision a vm with Ansible
-    # client.vm.provision "ansible" do |ansible|
-    #   ansible.playbook = "python.yaml"
-    # end
+    client.vm.provision "ansible" do |ansible|
+      ansible.playbook = "python.yaml"
+    end
 
   end
 
