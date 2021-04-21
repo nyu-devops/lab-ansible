@@ -8,25 +8,30 @@
 #     system('./keys/create-keys.sh')
 # end
 
-# WARNING: You will need the following plugin:
-# vagrant plugin install vagrant-guest_ansible
-if Vagrant.plugins_enabled?
-  unless Vagrant.has_plugin?('vagrant-guest_ansible')
-    puts 'Plugin missing.'
-    system('vagrant plugin install vagrant-guest_ansible')
-    puts 'Ansible dependencies installed, please try the command again.'
-    exit
-  end
-end
+# # WARNING: You will need the following plugin:
+# # vagrant plugin install vagrant-guest_ansible
+# if Vagrant.plugins_enabled?
+#   unless Vagrant.has_plugin?('vagrant-guest_ansible')
+#     puts 'Plugin missing.'
+#     system('vagrant plugin install vagrant-guest_ansible')
+#     puts 'Ansible dependencies installed, please try the command again.'
+#     exit
+#   end
+# end
 
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
 Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu/bionic64"
+  # config.vm.box = "ubuntu/bionic64"
+  config.vm.box = "bento/ubuntu-20.04"
 
   config.vm.synced_folder "./", "/vagrant", owner: "vagrant", mount_options: ["dmode=755,fmode=644"]
+
+  ############################################################
+  # Copy some host files to configure VM like the host
+  ############################################################
 
   # Copy the ssh keys to all of the vms
   if File.exists?(File.expand_path("./keys/id_rsa"))
@@ -54,31 +59,64 @@ Vagrant.configure("2") do |config|
     web.vm.hostname = "web"
     web.vm.network "private_network", ip: "192.168.33.20"
     web.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+
     web.vm.provider "virtualbox" do |vb|
       vb.memory = "512"
       vb.cpus = 1
     end
+    
+    web.vm.provider "docker" do |docker, override|
+      override.vm.box = nil
+      docker.image = "rofrano/vagrant-provider:debian"
+      docker.remains_running = true
+      docker.has_ssh = true
+      docker.privileged = true
+      docker.volumes = ["/sys/fs/cgroup:/sys/fs/cgroup:ro"]
+    end
+  
   end
 
   # Create the db server
   config.vm.define "db" do |db|
     db.vm.hostname = "db"
     db.vm.network "private_network", ip: "192.168.33.30"
+
     db.vm.provider "virtualbox" do |vb|
       vb.memory = "512"
       vb.cpus = 1
     end
+
+    db.vm.provider "docker" do |docker, override|
+      override.vm.box = nil
+      docker.image = "rofrano/vagrant-provider:debian"
+      docker.remains_running = true
+      docker.has_ssh = true
+      docker.privileged = true
+      docker.volumes = ["/sys/fs/cgroup:/sys/fs/cgroup:ro"]
+    end
+
   end
 
   # Create the ansible client to control servers
   config.vm.define "client" do |client|
     client.vm.hostname = "client"
     client.vm.network "private_network", ip: "192.168.33.10"
-    client.vm.network "forwarded_port", guest: 5000, host: 5000, host_ip: "127.0.0.1"
+    # client.vm.network "forwarded_port", guest: 8080, host: 8080, host_ip: "127.0.0.1"
+
     client.vm.provider "virtualbox" do |vb|
       vb.memory = "256"
       vb.cpus = 1
     end
+
+    client.vm.provider "docker" do |docker, override|
+      override.vm.box = nil
+      docker.image = "rofrano/vagrant-provider:debian"
+      docker.remains_running = true
+      docker.has_ssh = true
+      docker.privileged = true
+      docker.volumes = ["/sys/fs/cgroup:/sys/fs/cgroup:ro"]
+    end
+
     # Install required application libraries
     client.vm.provision "shell", inline: <<-SHELL
       sudo apt-get update
