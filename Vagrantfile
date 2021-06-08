@@ -24,9 +24,7 @@
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
 Vagrant.configure("2") do |config|
-  # config.vm.box = "ubuntu/bionic64"
-  config.vm.box = "bento/ubuntu-20.04"
-
+  config.vm.box = "ubuntu/focal64"
   config.vm.synced_folder "./", "/vagrant", owner: "vagrant", mount_options: ["dmode=755,fmode=644"]
 
   ############################################################
