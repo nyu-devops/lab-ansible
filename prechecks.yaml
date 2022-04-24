@@ -13,7 +13,7 @@
       changed_when: false
       failed_when: false
     - name: Install python
-      raw: (apt-get -y update && apt-get install -y python)
+      raw: (apt-get -y update && apt-get install -y python3)
       when: python_installed.rc != 0
   tasks:
     - name: Ansible setup
