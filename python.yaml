@@ -1,13 +1,15 @@
 ---
 - name: Performing Package Maintenance on All nodes
-  hosts: all
+  hosts: localhost
+  connection: local
   become: yes
   tasks:
   - name: Update and upgrade local packages
     apt: upgrade=yes update_cache=yes
 
 - name: Installing Python development environment
-  hosts: all
+  hosts: localhost
+  connection: local
   become: yes
   tasks:
   - name: Install Python packages using the apt module
