@@ -64,9 +64,9 @@
 ######################################################################
 # Both web and db Servers
 ######################################################################
-- hosts: webservers:dbservers
-  become: yes
+# - hosts: webservers:dbservers
+#   become: yes
 
-  tasks:
-  - name: Stop UFW NOW!!!
-    service: name=ufw state=stopped
+#   tasks:
+#   - name: Stop UFW NOW!!!
+#     service: name=ufw state=stopped
