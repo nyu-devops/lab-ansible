@@ -60,7 +60,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "client" do |client|
     client.vm.hostname = "client"
     client.vm.network "private_network", ip: "192.168.56.40"
-    client.vm.network "forwarded_port", guest: 8090, host: 8090, host_ip: "127.0.0.1"
+    client.vm.network "forwarded_port", guest: 8000, host: 8000, host_ip: "127.0.0.1"
 
     client.vm.provider "virtualbox" do |vb|
       vb.memory = "512"
