@@ -131,7 +131,7 @@ playbook: playbook.yaml
 
 ### Using Dry Run mode
 
-You can also run the playbooks in _Dry Run_ mode to check what would be changing if you atually ran it. You would use the `--check` flag to do this:
+You can also run the playbooks in _Dry Run_ mode to check what would be changing if you actually ran it. You would use the `--check` flag to do this:
 
     ansible-playbook playbook.yaml --check
 
