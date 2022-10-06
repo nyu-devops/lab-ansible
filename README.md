@@ -48,7 +48,7 @@ db1 | FAILED! => {
 }
 ```
 
-What happened? Ansible needs Python installed on all of the nodes in order to work. We can fix this with Ansible by making sure that Pythin is installed first. Do so this run the `prechecks.yaml` playbook like this:
+What happened? Ansible needs Python installed on all of the nodes in order to work. We can fix this with Ansible by making sure that Python is installed first. Do so this run the `prechecks.yaml` playbook like this:
 
     ansible-playbook prechecks.yaml
 
