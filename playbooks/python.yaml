@@ -19,6 +19,6 @@
 
   - name: Install Python requirements into the specified (virtualenv)
     pip:
-      requirements: /vagrant/requirements.txt
+      requirements: /vagrant/app/requirements.txt
       virtualenv: /home/vagrant/venv
       virtualenv_command: /usr/bin/python3 -m venv      
