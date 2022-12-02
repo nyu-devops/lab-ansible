@@ -10,7 +10,7 @@ counter = Redis.from_url(DATABASE_URI, encoding="utf-8", decode_responses=True)
 
 @app.route("/")
 def index():
-    return "Hello Flask"
+    return "<h1>Hello Flask</h1>"
 
 @app.route("/counter")
 def get_counter():
