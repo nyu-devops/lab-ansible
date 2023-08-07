@@ -1,5 +1,6 @@
 # lab-ansible
-This repository is part of lab for the *NYU DevOps* class for Fall 2017, [CSCI-GA.3033-013](http://cs.nyu.edu/courses/fall17/CSCI-GA.3033-014/) on using Ansible for Configuration Management.
+
+This repository is part of the lab for the NYU graduate class **CSCI-GA.2810-001: DevOps and Agile Methodologies** on using Ansible for Configuration Management.
 
 This lab demonstrates how to use Ansible to create and configure Virtual Machines. While the majority of this course uses Platform as a Service, there are times when you may need to setup your own infrastructure in-house and it's important that even that is full automated.
 
@@ -267,3 +268,11 @@ This will use the `python.yaml` playbook that is included in this repo to provis
 ## Experiment
 
 You now have a small multi-server environment on your laptop where you can feel free to explore  more `ansible` commands that you've learned in class.
+
+## License
+
+Copyright (c) 2016, 2023, John Rofrano. All rights reserved.
+
+Licensed under the Apache License. See LICENSE
+
+This repository is part of the NYU graduate class **CSCI-GA.2810-001: DevOps and Agile Methodologies** taught by [John Rofrano](http://cs.nyu.edu/~rofrano/), Adjunct Instructor, NYU Courant Institute, Graduate Division, Computer Science.
