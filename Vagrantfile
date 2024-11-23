@@ -34,15 +34,15 @@ Vagrant.configure("2") do |config|
   ############################################################
 
   # Copy the ssh keys to all of the vms
-  if File.exists?(File.expand_path("./keys/id_rsa"))
+  if File.exist?(File.expand_path("./keys/id_rsa"))
     config.vm.provision "file", source: "./keys/id_rsa", destination: "~/.ssh/id_rsa"
   end
-  if File.exists?(File.expand_path("./keys/id_rsa.pub"))
+  if File.exist?(File.expand_path("./keys/id_rsa.pub"))
     config.vm.provision "file", source: "./keys/id_rsa.pub", destination: "~/.ssh/id_rsa.pub"
   end
 
   # Copy your .vimrc file so that your VI editor looks right
-  if File.exists?(File.expand_path("~/.vimrc"))
+  if File.exist?(File.expand_path("~/.vimrc"))
     config.vm.provision "file", source: "~/.vimrc", destination: "~/.vimrc"
   end
 
